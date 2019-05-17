@@ -1,56 +1,77 @@
 # Capstone Project
+# Modeling Droughts in the Contiguous United States
+### David Bertsch
+### May 17, 2019
 
-Your Capstone project is the culmination of your time at GA. You will be tasked with developing an interesting question, collecting the data required to model that data, developing the strongest model (or models) for prediction, and communicating those findings to other data scientists and non-technical individuals. This introductory document lays out the five consitutent portions of the project and their due dates.
+### *Notebook Directory*
 
-## Your Deliverables
+- *[1a - National Data Loading](./1a-Data_Loading_National.ipynb)*
+- *[1b - Climate Division Data Loading](./1b-Data_Loading_Climate_Div.ipynb)*
+- *[2 - Climate Division Data Mapping](./2-Data_Mapping_Climate_Div.ipynb)*
+- *[3 - Data Compiling](./3-Data_Compiling.ipynb)*
+- *[4 - Data Simplification](./4-Simplifying_Data_to_3D.ipynb)*
+- *[5 - National Drought Analysis](./5-National_Drought_Data_Analysis.ipynb)*
+- *[6a - CNN Model 1](./6a-CNN_initial.ipynb)*
+- *[6b - CNN Model 2](./6b-CNN_3D_initial_model_with_25_epochs.ipynb)*
+- *[6c - CNN Model 3](./6c-CNN_second_model_50_epochs.ipynb)*
+- *[6d - CNN Model 4](./6d-CNN_third_model_35_epochs.ipynb)*
+- *[6e - CNN Model 5](./6e-CNN_fourth_model_8_lags_25_epochs.ipynb)*
 
-- A well-made predictive model using either structured or unstructured machine learning techniques (or other technique approved in advanced by the global instructors), as well as clean, well-written code. 
-- A technical report aimed at fellow data scientists that explains your process and findings
-- A public presentation of your findings aimed at laypeople. 
+## Problem
+1. What are the climatic trends of droughts in the United States?
+2. How can droughts in local regions across the United States be modeled in order to make predictions of future conditions?
 
-### **[Capstone, Part 1: Topic Proposals](./part_01/)**
+## Data
+I gathered data from the [United States Drought Monitor](https://droughtmonitor.unl.edu/Data/DataDownload/ComprehensiveStatistics.aspx). Geographically, one dataset is a time series of aggregate drought levels for the entire contiguous United States (CONUS), and the other dataset is broken down into climate subdivisions. Background information of these climate divisions can be found from the [National Oceanic and Atmospheric Administrations (NOAA):](https://www.ncdc.noaa.gov/monitoring-references/maps/us-climate-divisions.php)
 
-In Part 1, get started by choosing **three potential topics and problems**, describing your goals & criteria for success, potential audience(s), and identifying 1-2 potential datasets. In the field of data science, good projects are practical. Your capstone project should be manageable and affect a real world audience. This might be a domain you are familiar with, a particular interest you have, something that affects a community you are involved in, or an area that relates to a field you wish to work in.
+Here is a map of these divisions:
 
-One of the best ways to test ideas quickly is to share them with others. A good data scientist has to be comfortable discussing ideas and presenting to audiences. That's why for Part 1 of your Capstone project, you'll be preparing a lightning talk in addition to your initial notebook outlining the scope of your project.  You will present your candidate topics in a slide deck, and should be prepared to answer questions and defend your data selection(s). Presentations should take no more than 3-5 minutes.
+![Climate Divisions Map](./images/us_climate_divisions_map.png)
 
-**The ultimate choice of topic for your capstone project is yours!** However, this is research and development work. Sometimes projects that look easy can be difficult and vice versa. It never hurts to have a second (or third) option available.
+## Plan
+*1. What are the climatic trends of droughts in the United States?*
 
-- **Goal**: Prepare a 3-5 minute lightning talk that covers three potential topics, including potential sources of data, goals, metrics and audience.
-- **Due**: Jan 2, 2019
+- Visually analyze the national time series data to qualitatively assess trends in the data over time. 
+- Build a SARIMA model to forecast future national drought conditions.
 
-### **[Capstone, Part 2: Problem Statement + EDA](./part_02/)**
+*2. How can droughts in local regions across the United States be modeled in order to make predictions of future conditions?*
 
-For Part 2, provide a clear statement of the problem that you have chosen and an overview of your approach to solving that problem. Summarize your objectives, goals & success metrics, and any risks & assumptions. Outline your proposed methods and models, perform your initial EDA, and summarize the process. **Your data should be in hand by this point in the process!**
+- Map local drought data to rectangular grid of "pixels"
+- Construct Convolutional Neural Network (CNN) model in order to discern spatiotemporal patterns
+- Feed predictions into model in order to generate long term forecast
 
-**Again, your data should be in hand by this point the process!**
+## Hypotheses
 
-- **Goal**: Describe your proposed approach and summarize your initial EDA in a code submission to your local instructor ([submission link (LINK TBD)](#))
-- **Due**: Jan 16, 2019
+- Droughts in the US are trending towards more severe.
+- Areas that are the most prone to droughts are undergoing the most pronounced increases in drought levels.
 
-### **[Capstone, Part 3: Progress Report + Preliminary Findings](./part_03/)**
 
-In Part 3, you'll create a progress report of your work in order to get feedback along the way. Describe your approach, initial results, and any setbacks or lessons learned so far. Your report should include updated visual and statistical analysis of your data. You’ll also meet with your local instructional team to get feedback on your results so far!
+## Modeling
 
-- **Goal**: Discuss progress and setbacks, include visual and statistical analysis, review with instructor. [Submit your progress update on this form (LINK TBD).](#)
-- **Due**: Jan 30, 2019
+In order to analyze and forecast the national drought data, I will build SARIMA models for each of the 6 different drought measurements and their composite "drought score" (that I generate as a weighted sum of the 6 different drought measurements). 
 
-### **[Capstone, Part 4: Report Writeup + Technical Analysis](./part_04/)**
+In order to model the localized drought conditions across the CONUS, I will build a convolutional neural network that predicts the drought levels across the map of the contiguous United States. Initially, I will set the data up by defining a rectangular grid of equally spaced latitudes and longitudes. Then, I will assign each latitude and longitude a time series of the composite drought score data based on which of the climate divisions the point falls into. Then, I will set up the model so that the Y variable is the drought score at a single point in time for each latitude and longitude. The X variable is a subset of the previous points in time. I will test models with a few different constructions of X.
 
-By now, you're ready to apply your modeling skills to make machine learning predictions. Your goal for Part 4 is to develop a technical document (in the form of Jupyter notebook) that can be shared among your peers.
 
-Document your research and analysis including a summary, an explanation of your modeling approach as well as the strengths and weaknesses of any variables in the process. You should provide insight into your analysis, using best practices like cross validation or applicable prediction metrics.
+## Results and Plans for Improvement
 
-- **Goal**: Detailed report and code with a summary of your statistical analysis, model, and evaluation metrics.
-- **Due**: Feb 7, 2019
+In analyzing the national drought conditions over time, there were a couple of things that stood out. For most of the drought indicators, the changes over time were subtle. In general the mean levels for these drought metrics does not seem to be trending up or down. Most of the difference is in the nature of the fluctuations. In the more recent dates in the time series, there are larger sudden fluctuations compared to the beginning. Also, for the indicators of extreme and exceptional drought, there are longer wavelengths in the seasonal fluctuations, representing periods of drought that are more sustained. In terms of the model performance, I am able to capture some of the seasonality and long term trends in the time series for most of the drought measurements. My models are not very good at predicting short term fluctuations. With further tuning, I think I can generate meaningful long term forecasts. As my models currently stand, they may have some use in forecasting long range trends, but I think they are not yet reliable.
 
-### **[Capstone, Part 5: Presentation + Recommendations](./part_05/)**
+For the CNN model, I was able to generate predictions that resembled drought fluctuations that occur in the actual data, but the model's predicted fluctuations are not lined up with the actual data. The model also is limited in that it tends to only predict drought in the southern localities, and so it does not seem to capture drought conditions that occur in the northern midwest for instance. I am not sure that this is a viable approach for making predictions, but I will work on improving this as much as I can. The most important improvements will be to find a way to implement an R2 score metric for keras that computes the R2 score for each point in space and aggregates it. As it is with just the MSE and MAE, I am not able to meaningfully quantify the performance of the models. The MSE and MAE at least can be used to find the optimum number of epochs to run in the CNN models, and I would like to try running even more epochs moving forward, since the MSE and MAE were still improving even in the model with 50 epochs. One limitation with this kind of modeling is that there is very long computation time. Furthermore, the limitations of my machine are such that I can only consider so many lags as my X variable without crashing the kernel. If I am able to substantially improve the model performance moving forward, I will look into using cloud computing in order to make the modeling more efficient.
 
-Whether during an interview or as part of a job, you will frequently have to present your findings to business partners and other interested parties - many of whom won't know anything about data science! That's why for Part 5, you'll create a presentation of your previous findings with a non-technical audience in mind.
+If I am able to attain good performance with this type of model, I will then focus on working it into a recurrent neural network, so that the predictions from the CNN are fed into the X variable for future dates. With the model as it is currently constructed, even if the performance is excellent, it is not practically useful for making climatic predictions, since it relies on recent data for each prediction.
 
-You should already have the analytical work complete, so now it's time to clean up and clarify your findings. Come up with a detailed slide deck or interactive demo that explains your data, visualizes your model, describes your approach, articulates strengths and weaknesses, and presents specific recommendations. Be prepared to explain and defend your model to an inquisitive audience!
+One other idea for building on this is to run non-spatially-dependent time series models for each point on the grid. Then, I could compile all of the models' predictions together to form the same output that my current model has. It would be an interesting point of comparison.
 
-- **Goal**: Detailed presentation deck that relates your data, model, and findings to a non-technical audience.
-- **Due**: Feb 12, 2019
-# DSI_Capstone_Modeling_Drought
-# DSI_Capstone_Modeling_Drought
+
+## Conclusions
+
+*1. What are the climatic trends of droughts in the United States?*
+
+- There have been longer, more frequent, more sudden, and more severe periods of drought in the contiguous United States from 2011-2019 compared to 2000-2010, which suggests a general trend moving forward. 
+- It would be interesting to compare this time series against historical data from before 2000 in order to get a better sense of how the trends in this data compare against a longer span of history.
+
+*2. How can droughts in local regions across the United States be modeled in order to make predictions of future conditions?*
+
+- A CNN model is potentially useful as a tool to build a spatio-temporal model. While I have not been able to fully put it together for the purposes of generating long-range drought predictions, I think that I can potentially achieve this with continued work.
+- If a CNN model is built that accurately predicts the map of drought conditions based on previous points in time, that would still need to be expanded into a recurrent model that used the CNN model's predictions as a new X for long range forecasting.
