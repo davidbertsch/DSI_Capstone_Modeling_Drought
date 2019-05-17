@@ -26,7 +26,7 @@ I gathered data from the [United States Drought Monitor](https://droughtmonitor.
 
 Here is a map of these divisions:
 
-![Climate Divisions Map](../capstone/images/us_climate_divisions_map.png)
+![Climate Divisions Map](./images/us_climate_divisions_map.png)
 
 ## Plan
 *1. What are the climatic trends of droughts in the United States?*
